@@ -1,1 +1,195 @@
-This Works!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FPGA Cosmic Particle Network</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(45deg, #1b2735 0%, #0a1625 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            perspective: 1000px;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,255,255,0) 70%);
+            border-radius: 50%;
+            animation: cosmic-dance 10s infinite linear;
+            opacity: 0.7;
+        }
+
+        .circuit-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        .circuit-line {
+            position: absolute;
+            background: linear-gradient(to right, #00ff00, #00aa00);
+            opacity: 0.3;
+        }
+
+        .company-name {
+            position: absolute;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5vw;
+            color: rgba(0,255,255,0.8);
+            text-shadow: 0 0 20px rgba(0,255,255,0.5), 0 0 40px rgba(0,255,255,0.3);
+            text-align: center;
+            z-index: 10;
+            animation: text-pulse 3s infinite alternate;
+        }
+
+        @keyframes cosmic-dance {
+            0% {
+                transform: 
+                    translateX(0) 
+                    translateY(0) 
+                    translateZ(0) 
+                    rotateX(0deg) 
+                    rotateY(0deg) 
+                    scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: 
+                    translateX(calc(var(--x-offset) * 2)) 
+                    translateY(calc(var(--y-offset) * 2)) 
+                    translateZ(calc(var(--z-offset) * 2)) 
+                    rotateX(360deg) 
+                    rotateY(180deg) 
+                    scale(1.5);
+                opacity: 0.3;
+            }
+            100% {
+                transform: 
+                    translateX(0) 
+                    translateY(0) 
+                    translateZ(0) 
+                    rotateX(0deg) 
+                    rotateY(0deg) 
+                    scale(1);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes text-pulse {
+            0% { 
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            100% { 
+                transform: scale(1.05);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.5; }
+        }
+
+        .digital-node {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(0,255,255,0.5);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,255,255,0.7);
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particleContainer"></div>
+    <div class="circuit-overlay" id="circuitOverlay"></div>
+    <div class="company-name">Velzure Solutions</div>
+
+    <script>
+        function createParticles(count) {
+            const container = document.getElementById('particleContainer');
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                // Random positioning
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+
+                // Custom properties for varied movement
+                particle.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 200}px`);
+                particle.style.setProperty('--y-offset', `${(Math.random() - 0.5) * 200}px`);
+                particle.style.setProperty('--z-offset', `${(Math.random() - 0.5) * 200}px`);
+
+                // Randomize animation delay
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+
+                container.appendChild(particle);
+            }
+        }
+
+        function createCircuitLines(lineCount) {
+            const overlay = document.getElementById('circuitOverlay');
+            
+            for (let i = 0; i < lineCount; i++) {
+                const line = document.createElement('div');
+                line.classList.add('circuit-line');
+
+                // Random line properties
+                const angle = Math.random() * 360;
+                const length = Math.random() * 200 + 50;
+                const width = Math.random() * 2 + 1;
+
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.width = `${length}px`;
+                line.style.height = `${width}px`;
+                line.style.left = `${Math.random() * 100}%`;
+                line.style.top = `${Math.random() * 100}%`;
+
+                overlay.appendChild(line);
+            }
+        }
+
+        function createDigitalNodes(nodeCount) {
+            const container = document.getElementById('particleContainer');
+            
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.classList.add('digital-node');
+
+                // Random positioning
+                node.style.left = `${Math.random() * 100}%`;
+                node.style.top = `${Math.random() * 100}%`;
+
+                container.appendChild(node);
+            }
+        }
+
+        createParticles(100);
+        createCircuitLines(50);
+        createDigitalNodes(20);
+    </script>
+</body>
+</html>
