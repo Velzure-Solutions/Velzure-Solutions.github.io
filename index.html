@@ -2,194 +2,296 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Velzure Solutions</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --bg-primary: #0a0c10;
+            --text-primary: #f0f4f8;
+            --accent-color: #00f0ff;
+            --secondary-color: #1a2b3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            margin: 0;
-            overflow: hidden;
-            background: linear-gradient(45deg, #1b2735 0%, #0a1625 100%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Courier New', monospace;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .particles {
-            position: absolute;
+        .page {
+            display: none;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            perspective: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(10, 12, 16, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
         }
 
-        .particle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: radial-gradient(circle, rgba(0,255,255,0.8) 0%, rgba(0,255,255,0) 70%);
-            border-radius: 50%;
-            animation: cosmic-dance 10s infinite linear;
-            opacity: 0.7;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
         }
 
-        .circuit-overlay {
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Home Page */
+        #home {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--accent-color), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--accent-color);
+            color: var(--bg-primary);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Particle Background */
+        .particle-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            opacity: 0.2;
-        }
-
-        .circuit-line {
-            position: absolute;
-            background: linear-gradient(to right, #00ff00, #00aa00);
+            z-index: 1;
             opacity: 0.3;
         }
 
-        .company-name {
+        .particle {
             position: absolute;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 5vw;
-            color: rgba(0,255,255,0.8);
-            text-shadow: 0 0 20px rgba(0,255,255,0.5), 0 0 40px rgba(0,255,255,0.3);
+            background: radial-gradient(circle, rgba(0,240,255,0.5) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: particle-drift 10s infinite linear;
+        }
+
+        @keyframes particle-drift {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(var(--x-offset), var(--y-offset)) scale(1.5); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Products Page */
+        #products {
+            background-color: var(--secondary-color);
+            padding: 100px 5%;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .product-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
             text-align: center;
-            z-index: 10;
-            animation: text-pulse 3s infinite alternate;
+            transition: transform 0.4s ease;
         }
 
-        @keyframes cosmic-dance {
-            0% {
-                transform: 
-                    translateX(0) 
-                    translateY(0) 
-                    translateZ(0) 
-                    rotateX(0deg) 
-                    rotateY(0deg) 
-                    scale(1);
-                opacity: 0.7;
-            }
-            50% {
-                transform: 
-                    translateX(calc(var(--x-offset) * 2)) 
-                    translateY(calc(var(--y-offset) * 2)) 
-                    translateZ(calc(var(--z-offset) * 2)) 
-                    rotateX(360deg) 
-                    rotateY(180deg) 
-                    scale(1.5);
-                opacity: 0.3;
-            }
-            100% {
-                transform: 
-                    translateX(0) 
-                    translateY(0) 
-                    translateZ(0) 
-                    rotateX(0deg) 
-                    rotateY(0deg) 
-                    scale(1);
-                opacity: 0.7;
-            }
+        .product-card:hover {
+            transform: translateY(-10px);
         }
 
-        @keyframes text-pulse {
-            0% { 
-                transform: scale(1);
-                opacity: 0.7;
-            }
-            100% { 
-                transform: scale(1.05);
-                opacity: 1;
-            }
+        /* Technologies Page */
+        #technologies {
+            padding: 100px 5%;
+            background: linear-gradient(135deg, var(--bg-primary), var(--secondary-color));
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.5; }
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
         }
 
-        .digital-node {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: rgba(0,255,255,0.5);
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,255,255,0.7);
-            animation: pulse 2s infinite;
+        .tech-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="particles" id="particleContainer"></div>
-    <div class="circuit-overlay" id="circuitOverlay"></div>
-    <div class="company-name">Velzure Solutions</div>
+    <nav class="navbar">
+        <div class="logo">Velzure Solutions</div>
+        <div class="nav-links">
+            <a href="#" data-page="home">Home</a>
+            <a href="#" data-page="products">Products</a>
+            <a href="#" data-page="technologies">Technologies</a>
+            <a href="#" data-page="contact">Contact</a>
+        </div>
+    </nav>
+
+    <div id="home" class="page active">
+        <div class="particle-bg" id="particleBg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Innovate Beyond Boundaries</h1>
+            <p class="hero-subtitle">Cutting-edge FPGA and Digital Solutions</p>
+            <a href="#" class="cta-button" data-page="products">Explore Solutions</a>
+        </div>
+    </div>
+
+    <div id="products" class="page">
+        <h2 style="text-align: center; margin-bottom: 50px;">Our Solutions</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <h3>FPGA Design</h3>
+                <p>Custom hardware acceleration and digital logic solutions</p>
+            </div>
+            <div class="product-card">
+                <h3>Edge Computing</h3>
+                <p>Distributed computing architectures for next-gen applications</p>
+            </div>
+            <div class="product-card">
+                <h3>AI Acceleration</h3>
+                <p>Machine learning hardware optimization and design</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="technologies" class="page">
+        <h2 style="text-align: center; margin-bottom: 50px;">Technology Stack</h2>
+        <div class="tech-stack">
+            <div class="tech-item">Xilinx Platforms</div>
+            <div class="tech-item">Intel FPGA</div>
+            <div class="tech-item">Machine Learning</div>
+            <div class="tech-item">Cloud Integration</div>
+        </div>
+    </div>
+
+    <div id="contact" class="page">
+        <h2 style="text-align: center; margin-bottom: 50px;">Contact Us</h2>
+        <div style="text-align: center;">
+            <p>Email: info@velzuresolutions.com</p>
+            <p>Phone: +1 (888) VELZURE</p>
+        </div>
+    </div>
 
     <script>
+        // Page Navigation
+        document.querySelectorAll('.nav-links a, .cta-button').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPage = this.getAttribute('data-page');
+                navigateToPage(targetPage);
+            });
+        });
+
+        function navigateToPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show target page
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Particle Background Animation
         function createParticles(count) {
-            const container = document.getElementById('particleContainer');
+            const particleBg = document.getElementById('particleBg');
             
             for (let i = 0; i < count; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
 
-                // Random positioning
+                particle.style.width = `${Math.random() * 10 + 5}px`;
+                particle.style.height = particle.style.width;
                 particle.style.left = `${Math.random() * 100}%`;
                 particle.style.top = `${Math.random() * 100}%`;
 
-                // Custom properties for varied movement
                 particle.style.setProperty('--x-offset', `${(Math.random() - 0.5) * 200}px`);
                 particle.style.setProperty('--y-offset', `${(Math.random() - 0.5) * 200}px`);
-                particle.style.setProperty('--z-offset', `${(Math.random() - 0.5) * 200}px`);
-
-                // Randomize animation delay
                 particle.style.animationDelay = `${Math.random() * 10}s`;
 
-                container.appendChild(particle);
+                particleBg.appendChild(particle);
             }
         }
 
-        function createCircuitLines(lineCount) {
-            const overlay = document.getElementById('circuitOverlay');
-            
-            for (let i = 0; i < lineCount; i++) {
-                const line = document.createElement('div');
-                line.classList.add('circuit-line');
-
-                // Random line properties
-                const angle = Math.random() * 360;
-                const length = Math.random() * 200 + 50;
-                const width = Math.random() * 2 + 1;
-
-                line.style.transform = `rotate(${angle}deg)`;
-                line.style.width = `${length}px`;
-                line.style.height = `${width}px`;
-                line.style.left = `${Math.random() * 100}%`;
-                line.style.top = `${Math.random() * 100}%`;
-
-                overlay.appendChild(line);
-            }
-        }
-
-        function createDigitalNodes(nodeCount) {
-            const container = document.getElementById('particleContainer');
-            
-            for (let i = 0; i < nodeCount; i++) {
-                const node = document.createElement('div');
-                node.classList.add('digital-node');
-
-                // Random positioning
-                node.style.left = `${Math.random() * 100}%`;
-                node.style.top = `${Math.random() * 100}%`;
-
-                container.appendChild(node);
-            }
-        }
-
+        // Initialize particles
         createParticles(100);
-        createCircuitLines(50);
-        createDigitalNodes(20);
     </script>
 </body>
 </html>
